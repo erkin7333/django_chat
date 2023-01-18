@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>{% block title %}{{ request.title|default:"Django | Chat" }} {% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/bootstrap-4/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts_icon/bootstrap-icons.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-teal-500">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-teal-800">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'main:home' %}">Django Chat</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item {% if url_name == 'main:front-page' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'main:front-page' %}">Chatlar</a>
+                    </li>
+                    <li class="nav-item {% if url_name == 'main:xonalar' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'main:xonalar' %}">Chat uchun xonalar</a>
+                    </li>
+                    <li class="nav-item {% if url_name == 'accaunts:logout' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'accaunts:logout' %}">Chiqish</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item {% if url_name == 'accaunts:registr' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'accaunts:registr' %}">Ro'yxatdan o'tish</a>
+                    </li>
+                    <li class="nav-item {% if url_name == 'accaunts:login' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'accaunts:login' %}">Tizimga kirish</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    {% if messages %}
+        {% for mesage in messages%}
+            <div class="{{ message.tags }} alert-dismissible fade show">
+                {{ mesage }}
+                <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+</div>
+{% if url_name == "main:home" %}
+    <div class="p-10 lg:p-20 text-center">
+        <h1 class="text-3xl lg:text-6xl text-white">Django Chat</h1>
+    </div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+
+
+
+<script src="{% static 'jquery/jquery-3.6.1.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/bootstrap-4/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
